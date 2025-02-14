@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Responsive.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-light">
+        <div class="container">
+            <div class="col-12 d-flex justify-content-between align-items-center mb-1 mt-1 header-content">
+                <div class="col-2">
+                    <a class="navbar-brand" href="#">Weather App</a>
+                </div>
+                <div class="col-6 d-flex align-items-center">
+                    <a href="#" class="me-3 nav-item">Home</a>
+                    <a href="#" class="nav-item">About this App</a>
+                    <a href="#" class="ms-3 nav-item">Usage Guide</a>
+                </div>
+                <div class="input-group d-flex align-items-center">
+                    <input type="text" id="city-input" class="form-control" placeholder="Enter city name">
+                    <button class="btn btn-primary" onclick="searchWeather()">Search</button>
+                </div>
+                <div class="">
+                    <button id="theme-toggle" class="btn btn-outline-secondary ms-3">
+                        <span id="theme-icon" class="bi bi-moon-fill"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h3 class="text-center main-heading" id="city-name">Weather for Seattle</h3>
+        <button class="btn btn-success mb-3" onclick="saveFavoriteCity()">Save to Favorites</button>
+        <div id="favorite-cities" class="mb-4"></div>
+
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Temperatures</h5>
+                    <h3 id="temperature">--</h3>
+                    <p>Min Temperature: <span id="min-temp">--</span></p>
+                    <p>Max Temperature: <span id="max-temp">--</span></p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Wind Info</h5>
+                    <h3 id="wind-speed">--</h3>
+                    <p>Wind Degree: <span id="wind-degree">--</span></p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Sunrise & Sunset</h5>
+                    <p>Sunrise: <span id="sunrise">--</span></p>
+                    <p>Sunset: <span id="sunset">--</span></p>
+                </div>
+            </div>
+        </div>
+
+        
+        <h3 class="text-center common_place_weather mt-4">Weather of other common places</h3>
+        <div class="row d-flex justify-content-center">
+            <div class="col-12 d-flex table_width justify-content-center">
+            <table class="table table-bordered text-center justify-content-center" id="weather-table">
+                <thead class="">
+                    <tr>
+                        <th>City</th>
+                        <th>Cloud_pct</th>
+                        <th>Feels_like</th>
+                        <th>Humidity</th>
+                        <th>Max_temp</th>
+                        <th>Min_temp</th>
+                        <th>Sunrise</th>
+                        <th>Sunset</th>
+                        <th>Temp</th>
+                        <th>Wind_degrees</th>
+                        <th>Wind_speed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Shanghai</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>Boston</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>Lucknow</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>Kolkata</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+        
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+            document.getElementById("theme-icon").className = isDarkMode ? "bi bi-sun-fill" : "bi bi-moon-fill";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const isDarkMode = localStorage.getItem("darkMode") === "true";
+            if (isDarkMode) {
+                document.body.classList.add("dark-mode");
+                document.getElementById("theme-icon").className = "bi bi-sun-fill";
+            }
+
+            document.getElementById("theme-toggle").addEventListener("click", toggleDarkMode);
+            document.getElementById("search-btn").addEventListener("click", searchWeather);
+        });
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadFavoriteCities();
+        });
+
+        async function searchWeather(cityName) {
+            const city = cityName || document.getElementById('city-input').value.trim();
+            if (!city) return alert("Please enter a city name");
+
+            const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=en&format=json`;
+            try {
+                const geoResponse = await fetch(geoUrl);
+                if (!geoResponse.ok) throw new Error("Failed to fetch location");
+
+                const geoData = await geoResponse.json();
+                if (!geoData.results || geoData.results.length === 0) {
+                    return alert("City not found. Please enter a valid city.");
+                }
+
+                const { latitude, longitude, name } = geoData.results[0];
+                fetchWeather(latitude, longitude, name);
+            } catch (error) {
+                console.error("Error fetching location data:", error);
+                alert("Could not fetch city location. Try again.");
+            }
+        }
+
+        async function fetchWeather(latitude, longitude, city) {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=temperature_2m_min,temperature_2m_max,sunrise,sunset&timezone=auto`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Failed to fetch weather data");
+
+                const data = await response.json();
+                const weather = data.current_weather;
+                const daily = data.daily;
+                document.getElementById('city-name').innerText = `Weather for ${city}`;
+                document.getElementById('temperature').innerText = `${weather.temperature}°C`;
+                document.getElementById('min-temp').innerText = `${daily.temperature_2m_min[0]}°C`;
+                document.getElementById('max-temp').innerText = `${daily.temperature_2m_max[0]}°C`;
+                document.getElementById('wind-speed').innerText = `${weather.windspeed} km/hr`;
+                document.getElementById('wind-degree').innerText = `${weather.winddirection}°`;
+                document.getElementById('sunrise').innerText = new Date(daily.sunrise[0]).toLocaleTimeString();
+                document.getElementById('sunset').innerText = new Date(daily.sunset[0]).toLocaleTimeString();
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+                alert("Could not fetch weather data. Please try again.");
+            }
+        }
+
+        function saveFavoriteCity() {
+            const cityName = document.getElementById('city-name').innerText.replace('Weather for ', '');
+            if (!cityName) return;
+
+            let favoriteCities = JSON.parse(localStorage.getItem('favoriteCities')) || [];
+            if (!favoriteCities.includes(cityName)) {
+                favoriteCities.push(cityName);
+                localStorage.setItem('favoriteCities', JSON.stringify(favoriteCities));
+                loadFavoriteCities();
+            }
+        }
+
+        function loadFavoriteCities() {
+            const favoriteCities = JSON.parse(localStorage.getItem('favoriteCities')) || [];
+            const favoriteContainer = document.getElementById('favorite-cities');
+            favoriteContainer.innerHTML = '';
+            favoriteCities.forEach(city => {
+                const cityElement = document.createElement('div');
+                cityElement.classList.add('d-flex', 'justify-content-between', 'align-items-center', 'mb-2');
+                cityElement.innerHTML = `
+                    <span onclick="searchWeather('${city}')" style="cursor: pointer;">${city}</span>
+                    <button class="btn btn-danger btn-sm" onclick="deleteFavoriteCity('${city}')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                `;
+                favoriteContainer.appendChild(cityElement);
+            });
+        }
+
+        function deleteFavoriteCity(city) {
+            let favoriteCities = JSON.parse(localStorage.getItem('favoriteCities')) || [];
+            favoriteCities = favoriteCities.filter(c => c !== city);
+            localStorage.setItem('favoriteCities', JSON.stringify(favoriteCities));
+            loadFavoriteCities();
+        }
+    </script>
+</body>
+
+</html>

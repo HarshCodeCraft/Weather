@@ -1,0 +1,61 @@
+/* Responsive Styles */
+
+/* General Styles for Consistency */
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+.city-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+/* Make Table Responsive */
+.table {
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+}
+
+/* Responsive Design for Different Devices */
+@media (max-width: 1024px) { /* Tablets */
+    .header-content {
+        flex-direction: column;
+    }
+    .nav-item {
+        margin: 5px 0;
+    }
+    .input-group {
+        flex-direction: column;
+    }
+    #search-btn {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 768px) { /* Mobile */
+    .row {
+        flex-direction: column;
+    }
+    .col-md-4 {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .table {
+        font-size: 0.9rem;
+    }
+    .card {
+        padding: 15px;
+    }
+    .main-heading {
+        font-size: 1.5rem;
+    }
+    .city-icon {
+        font-size: 1.5rem;
+    }
+}
